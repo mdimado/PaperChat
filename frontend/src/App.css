@@ -155,7 +155,6 @@ i{
     padding: 60px 5%;
     box-sizing: border-box;
     overflow-x:scroll;
-    word-wrap: break-word;
   }
 
   .profile{
