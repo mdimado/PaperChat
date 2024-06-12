@@ -11,8 +11,8 @@ from qdrant_client import QdrantClient
 from qdrant_client.http.models import Distance, VectorParams, PointStruct
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_groq import ChatGroq
-import asyncio
-import io
+from dotenv import load_dotenv
+
 
 app = FastAPI()
 
@@ -24,17 +24,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+load_dotenv()
+
 UPLOAD_DIR = "uploaded_pdfs"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-COHERE_API_KEY = 'Xn61KaIwGs35b7VZ2afBMuRNdDKDCrCKmhYfiV1p'
-cohere_client = cohere.Client(COHERE_API_KEY)
+cohere_api_key = os.getenv('COHERE_API_KEY')
+cohere_client = cohere.Client(cohere_api_key)
 
 QDRANT_API_URL = 'http://localhost:6333'
 qdrant_client = QdrantClient(QDRANT_API_URL)
 
-GROQ_API_KEY = "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"
-groq_chat = ChatGroq(temperature=0.7, groq_api_key=GROQ_API_KEY, model_name="mixtral-8x7b-32768")
+groq_api_key = os.getenv('GROQ_API_KEY')
+groq_chat = ChatGroq(temperature=0.7, groq_api_key=groq_api_key, model_name="mixtral-8x7b-32768")
 
 @app.post("/upload/")
 async def upload_pdf(pdf_file: UploadFile = File(...)):
@@ -103,7 +105,7 @@ async def query_database(request: QueryRequest):
 
     async def response_generator():
         system_message = "The points provided are from a pdf that I have uploaded. The query at the end or the request is what you have to answer"
-        human_message = f"Question: {request.query}\n Context uploaded from the pdf:\n{context}\n---\nAnswer:\n\nplease answer in markdown only also add new line after each paragraph, also in the answer do not say or mention that you are answering in markdown format or anything like that"
+        human_message = f"Question: {request.query}\n Context uploaded from the pdf:\n{context}\n---\nAnswer:\n\nplease answer in markdown only also add new line after each paragraph use the ''' ''' to writhe the code so that we can directly copy it, also in the answer do not say or mention that you are answering in markdown format or anything like that"
 
         prompt = ChatPromptTemplate.from_messages([("system", system_message), ("human", human_message)])
         chain = prompt | groq_chat
