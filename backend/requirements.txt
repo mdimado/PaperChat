@@ -1,0 +1,10 @@
+fastapi
+pydantic
+shutil
+cohere
+langchain_community
+langchain
+qdrant_client
+dotenv
+langchain_groq
+langchain_core
