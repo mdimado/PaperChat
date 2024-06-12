@@ -5,7 +5,11 @@ PaperChat - AI-Driven PDF Interaction Platform
 
 This repository contains code for an AI-powered chat application that allows users to upload PDF documents, perform queries, and receive responses based on the content of the uploaded documents.
 
-https://github.com/mdimado/PaperChat/assets/123477562/c75a11db-8ae7-4ce6-9edf-b181cf36bbae
+
+
+https://github.com/mdimado/PaperChat/assets/123477562/a5adbe2b-6595-4acd-a5e6-8136b2a7fd50
+
+
 
 ### File Structure
 
