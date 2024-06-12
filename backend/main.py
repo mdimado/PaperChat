@@ -1,7 +1,18 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
 import os
-import fitz 
+import shutil
+import cohere
+from langchain_community.document_loaders import PyPDFLoader
+from langchain.text_splitter import CharacterTextSplitter
+from qdrant_client import QdrantClient
+from qdrant_client.http.models import Distance, VectorParams, PointStruct
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_groq import ChatGroq
+import asyncio
+import io
 
 app = FastAPI()
 
@@ -16,42 +27,93 @@ app.add_middleware(
 UPLOAD_DIR = "uploaded_pdfs"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
+COHERE_API_KEY = 'Xn61KaIwGs35b7VZ2afBMuRNdDKDCrCKmhYfiV1p'
+cohere_client = cohere.Client(COHERE_API_KEY)
+
+QDRANT_API_URL = 'http://localhost:6333'
+qdrant_client = QdrantClient(QDRANT_API_URL)
+
+GROQ_API_KEY = "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"
+groq_chat = ChatGroq(temperature=0.7, groq_api_key=GROQ_API_KEY, model_name="mixtral-8x7b-32768")
+
 @app.post("/upload/")
 async def upload_pdf(pdf_file: UploadFile = File(...)):
-    contents = await pdf_file.read()
     file_path = os.path.join(UPLOAD_DIR, pdf_file.filename)
     
     with open(file_path, "wb") as f:
-        f.write(contents)
+        shutil.copyfileobj(pdf_file.file, f)
     
-    text = extract_text_from_pdf(file_path)
-    chunks = split_text_into_chunks(text)
-    
-    return chunks
+    collection_name = os.path.splitext(pdf_file.filename)[0]  
 
-def extract_text_from_pdf(file_path):
-    text = ""
-    with fitz.open(file_path) as pdf_document:
-        for page in pdf_document:
-            text += page.get_text()
-    return text
+    loader = PyPDFLoader(file_path)
+    splitter = CharacterTextSplitter(separator='.\n')
 
-def split_text_into_chunks(text, words_per_chunk=200):
-    chunks = []
-    current_chunk = ""
-    current_word_count = 0
+    documents = loader.load()
+    pages = loader.load_and_split(splitter)
+    texts = splitter.split_documents(pages)
     
-    for paragraph in text.split('\n\n'):
-        words = paragraph.split()
-        for word in words:
-            current_chunk += word + ' '
-            current_word_count += 1
-            if current_word_count >= words_per_chunk:
-                chunks.append(current_chunk.strip())
-                current_chunk = ""
-                current_word_count = 0
-    
-    if current_chunk:
-        chunks.append(current_chunk.strip())
-    
-    return chunks
+    text_chunks = [chunk.page_content for chunk in texts]
+
+    embeddings = embed_text_chunks(text_chunks)
+
+    store_embeddings_in_qdrant(collection_name, text_chunks, embeddings)
+
+    return {"embeddings": embeddings}
+
+def embed_text_chunks(chunks):
+    response = cohere_client.embed(texts=chunks)
+    embeddings = response.embeddings
+    return embeddings
+
+def store_embeddings_in_qdrant(collection_name, text_chunks, embeddings):
+    vectors_config = VectorParams(size=4096, distance=Distance.COSINE)
+
+    points = []
+    for i, embedding in enumerate(embeddings, start=1):
+        points.append(PointStruct(id=i, vector=embedding, payload={"text": text_chunks[i-1]}))
+
+    qdrant_client.recreate_collection(
+        collection_name=collection_name,
+        vectors_config=vectors_config,
+    )
+
+    operation_info = qdrant_client.upsert(
+        collection_name=collection_name,
+        wait=True,
+        points=points
+    )
+
+class QueryRequest(BaseModel):
+    collection_name: str
+    query: str
+
+@app.post("/query/")
+async def query_database(request: QueryRequest):
+    query_embedding = cohere_client.embed(texts=[request.query]).embeddings[0]
+
+    search_result = qdrant_client.search(
+        collection_name=request.collection_name,
+        query_vector=query_embedding,
+        limit=3
+    )
+
+    context = ""
+    for result in search_result:
+        context += result.payload['text'] + "\n"
+
+    async def response_generator():
+        system_message = "The points provided are from a pdf that I have uploaded. The query at the end or the request is what you have to answer"
+        human_message = f"Question: {request.query}\n Context uploaded from the pdf:\n{context}\n---\nAnswer:\n\nplease answer in markdown only also add new line after each paragraph, also in the answer do not say or mention that you are answering in markdown format or anything like that"
+
+        prompt = ChatPromptTemplate.from_messages([("system", system_message), ("human", human_message)])
+        chain = prompt | groq_chat
+
+        async for chunk in chain.astream({"text": human_message}):
+            yield chunk.content
+
+    return StreamingResponse(response_generator(), media_type="text/plain")
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

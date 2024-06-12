@@ -1,38 +1,166 @@
-.App {
-  text-align: center;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.main{
   display: flex;
   flex-direction: column;
+}
+
+.header{
+  display: flex;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  width: 100%;
+  padding: 10px 30px;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  background-color: #ffffff;
+}
+
+
+.custom-file-upload {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #ffffff;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 10px;
+  font-size: 14px;
+  justify-content: center;
+}
+
+.custom-file-upload input[type="file"] {
+  display: none;
+}
+
+.custom-file-upload i{
+  margin-right: 7px;
+}
+
+.pdfname{
+  color: #0CA959;
+  margin-right: 20px;
+}
+
+i{
+  font-size: 20px;
+  font-weight: 100;
+}
+
+.labelbutton{
+  display: flex;
+  align-items: center;
+}
+
+.fileicon{
+  border: 1px solid #0CA959;
+  border-radius: 7px;
+  padding: 7px 6px;
+  margin-right: 10px;
+  color: #0CA959 !important;
+}
+
+.header img{
+  width: 100px;
+}
+
+.inputbox{
+  display: flex;
+  align-items: center;
+  position: fixed;
+  bottom: 3%;
+  width: 100%;
+  justify-content: center;
+  background-color: #ffffff;
+}
+
+.boxx{
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  width: 80%;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  border: 1px solid #d4d7dd;
+  border-radius: 5px;
 }
 
-.App-link {
-  color: #61dafb;
+.inputbox input{
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background-color: transparent;
+  font-size: 16px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.inputbox input:focus{
+  border: none;
+  outline: none;
+}
+
+.chat{
+  padding-top: 100px !important;
+  padding-bottom: 100px !important;
+  padding: 100px 10%;
+}
+
+.user-query, .bot-response{
+  margin: 20px 0px;
+  display: flex;
+}
+
+.icon{
+  max-width: 50px;
+}
+
+.profile{
+  margin-right: 30px;
+}
+
+.texts{
+  display: flex;
+  align-items: center;
+}
+
+.sendbutton{
+  background-color: transparent;
+  border: none;
+  margin-right: 10px;
+}
+
+
+@media only screen and (max-width:768px){
+  .custom-file-upload p{
+    display: none;
   }
-  to {
-    transform: rotate(360deg);
+
+  .custom-file-upload{
+    padding: 10px;
+  }
+
+  .custom-file-upload i{
+    margin-right: 0px;
+  }
+
+  .pdfname{
+    font-size: 12px;
+    margin-right: 5px;
+  }
+
+  .chat{
+    padding: 60px 5%;
+    box-sizing: border-box;
+    overflow-x:scroll;
+  }
+
+  .profile{
+    margin-right: 15px;
+  }
+  .icon{
+    max-width: 35px;
   }
 }
