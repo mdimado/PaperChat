@@ -13,15 +13,19 @@ https://github.com/mdimado/PaperChat/assets/123477562/a5adbe2b-6595-4acd-a5e6-81
 
 ### File Structure
 
-- **`backend/`**: Contains the FastAPI backend code.
-  - **`main.py`**: Main backend Python script.
-  - **`requirements.txt`**: File listing the Python dependencies.
-- **`frontend/`**: Contains the React frontend code.
-  - **`public/`**: Contains static assets and the main `index.html` file.
-  - **`src/`**: Contains the JavaScript code for the React components.
-    - **`components/`**: Contains React components used in the application.
-    - **`assets/`**: Static assets like images, fonts, etc.
-- **`readme.md`**: Documentation file providing information about the project setup and structure.
+- **`backend/`**
+  - **`main.py`**
+  - **`requirements.txt`**
+- **`frontend/`**
+  - **`public/`**
+  - **`src/`**
+    - **`components/`**
+    - **`assets/`**
+    - **`App.js/`**
+    - **`App.css/`**
+    - **`Index.js/`**
+    - **`Index.css/`**
+- **`readme.md`**
 
 ### Setup Instructions
 
