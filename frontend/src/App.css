@@ -32,6 +32,13 @@
   border-radius: 10px;
   font-size: 14px;
   justify-content: center;
+  transition: 0.5s;
+}
+
+.custom-file-upload:hover{
+  background-color: #0CA959;
+  color: #fff;
+  border: 1px solid #0CA959;
 }
 
 .custom-file-upload input[type="file"] {
@@ -73,10 +80,11 @@ i{
   display: flex;
   align-items: center;
   position: fixed;
-  bottom: 3%;
+  bottom: 0;
   width: 100%;
   justify-content: center;
   background-color: #ffffff;
+  padding-bottom: 30px;
 }
 
 .boxx{
@@ -86,7 +94,7 @@ i{
   align-items: center;
   justify-content: center;
   border: 1px solid #d4d7dd;
-  border-radius: 5px;
+  border-radius: 7px;
 }
 
 .inputbox input{
@@ -106,6 +114,7 @@ i{
   padding-top: 100px !important;
   padding-bottom: 100px !important;
   padding: 100px 10%;
+  overflow-y: auto;
 }
 
 .user-query, .bot-response{
@@ -131,6 +140,8 @@ i{
   border: none;
   margin-right: 10px;
 }
+
+
 
 
 @media only screen and (max-width:768px){
@@ -162,5 +173,11 @@ i{
   }
   .icon{
     max-width: 35px;
+  }
+  .inputbox{
+    padding-bottom: 20px;
+  }
+  .boxx{
+    width: 90%;
   }
 }
