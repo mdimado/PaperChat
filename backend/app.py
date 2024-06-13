@@ -104,7 +104,7 @@ async def query_database(request: QueryRequest):
         context += result.payload["text"] + "\n"
 
     async def response_generator():
-        system_message = "You are a question-answering assistant. You are given relevant context. Answer only in Markdown format. Use newlines, Use backticks for code. Do not mention markdown or code anywhere. Only answer what is asked and keep it concise."
+        system_message = "You are a question-answering assistant. You are given relevant context. Answer only in Markdown format. Use newlines, Use backticks for code. Do not mention markdown or code anywhere. Only answer what is asked and keep it concise. please"
         human_message = f"""### Question: {request.query}
         ### Context: {context}
         !!! Remember to answer in markdown format
