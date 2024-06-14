@@ -141,8 +141,19 @@ i{
   margin-right: 10px;
 }
 
+.loader{
+  display: inline-block;
+  animation: rotate 1s linear infinite;
+}
 
-
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 @media only screen and (max-width:768px){
   .custom-file-upload p{

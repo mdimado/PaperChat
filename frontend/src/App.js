@@ -115,18 +115,17 @@ const FileUpload = () => {
       <div className="header">
         <img src="https://proxmaq.com/wp-content/uploads/2023/03/AI_Planet-logo.jpg" alt="AI Planet Logo"/>
         <div className="labelbutton">
-        {selectedFile ? <div className="fileicon"><i className="ri-file-3-line"></i></div> : ""}
-        <label className="pdfname" htmlFor="file-upload">
-  {selectedFile && selectedFile.name.length > 12 ? (
-    uploading ? "Uploading..." : `${selectedFile.name.slice(0, 8) + "..." + selectedFile.name.slice(-4)}`
-  ) : selectedFile ? (
-    uploading ? "Uploading..." : selectedFile.name
-  ) : ""}
-</label>
-
+          {selectedFile ? (uploading ? <div className="fileicon"><i className="loader ri-loader-4-line"></i></div> : <div className="fileicon"><i className="ri-file-3-line"></i></div>) : ""}
+          <label className="pdfname" htmlFor="file-upload">
+            {selectedFile && selectedFile.name.length > 12 ? (
+              uploading ? "Uploading..." : `${selectedFile.name.slice(0, 8) + "..." + selectedFile.name.slice(-4)}`
+            ) : selectedFile ? (
+              uploading ? "Uploading..." : selectedFile.name
+            ) : ""}
+          </label>
           <label htmlFor="file-upload" className="custom-file-upload">
             <i className="ri-add-circle-line"></i><p>Upload PDF</p>
-            <input id="file-upload" type="file" onChange={handleFileChange} />
+            <input id="file-upload" type="file" onChange={handleFileChange} accept="application/pdf" />
           </label>
         </div>
       </div>
@@ -145,7 +144,7 @@ const FileUpload = () => {
         <div className="inputbox">
           <div className="boxx">
             <input placeholder="Send a message..." type="text" value={query} onChange={handleQueryChange} />
-            <button className="sendbutton" onClick={handleQuery} disabled={!pdfUploaded || !query}><i class="ri-send-plane-2-line"></i></button>
+            <button className="sendbutton" onClick={handleQuery} disabled={!pdfUploaded || !query}><i className="ri-send-plane-2-line"></i></button>
           </div>
         </div>
       </div>
