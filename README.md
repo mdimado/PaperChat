@@ -11,21 +11,7 @@ https://github.com/mdimado/PaperChat/assets/123477562/a5adbe2b-6595-4acd-a5e6-81
 
 
 
-### File Structure
 
-- **`backend/`**
-  - **`main.py`**
-  - **`requirements.txt`**
-- **`frontend/`**
-  - **`public/`**
-  - **`src/`**
-    - **`components/`**
-    - **`assets/`**
-    - **`App.js/`**
-    - **`App.css/`**
-    - **`Index.js/`**
-    - **`Index.css/`**
-- **`readme.md`**
 
 ### Setup Instructions
 
