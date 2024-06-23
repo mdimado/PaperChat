@@ -92,7 +92,7 @@ class QueryRequest(BaseModel):
     collection_name: str
     query: str
 
-
+# Endpoint for querying the database and generating responses
 @app.post("/query/")
 async def query_database(request: QueryRequest):
     query_embedding = cohere_client.embed(texts=[request.query]).embeddings[0]
