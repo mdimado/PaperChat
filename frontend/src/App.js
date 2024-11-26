@@ -39,7 +39,7 @@ const FileUpload = () => {
     formData.append("pdf_file", file);
 
     try {
-      const response = await axios.post("http://localhost:8000/upload/", formData, {
+      const response = await axios.post("https://paperchat-api-he1h.onrender.com/upload/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -72,7 +72,7 @@ const FileUpload = () => {
     setResponse(""); 
 
     try {
-      const response = await fetch('http://localhost:8000/query/', {
+      const response = await fetch('https://paperchat-api-he1h.onrender.com/query/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
