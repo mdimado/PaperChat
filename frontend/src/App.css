@@ -146,6 +146,30 @@ i{
   animation: rotate 1s linear infinite;
 }
 
+.no-chat-history{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10%;
+}
+
+
+.island{
+  background-color: rgb(255, 255, 255);
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5%;
+  width: 50%;
+  height: 40vh;
+  border: 1px solid rgb(220, 220, 220);
+
+}
+
 @keyframes rotate {
   from {
     transform: rotate(0deg);
@@ -154,6 +178,68 @@ i{
     transform: rotate(360deg);
   }
 }
+
+
+.markdown-body {
+  line-height: 1.6;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.markdown-body p {
+  margin-bottom: 1.5em; /* Increase the margin-bottom for paragraphs */
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.markdown-body blockquote {
+  margin: 0;
+  padding: 0 1em;
+  color: #6a737d;
+  border-left: 0.25em solid #dfe2e5;
+}
+
+.markdown-body pre {
+  padding: 16px;
+  overflow: auto;
+  line-height: 1.45;
+  background-color: #f6f8fa;
+  border-radius: 3px;
+}
+
+.markdown-body code {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(27, 31, 35, 0.05);
+  border-radius: 3px;
+}
+
+
+.logo{
+  display: flex;
+  align-items: center;
+}
+
+.logo img{
+  max-height: 50px;
+  width: auto;
+}
+
+.logodark{
+  display: none;
+}
+
+
+
 
 @media only screen and (max-width:768px){
   .custom-file-upload p{
@@ -191,4 +277,84 @@ i{
   .boxx{
     width: 90%;
   }
+
+  .island{
+    width: 90%;
+  
+  }
+
+  .novisible{
+    display: none;
+  }
+  .markdown-body {
+    margin-top: 5px;
+  }
+
+  .logo img{
+    max-height: 35px;
+    width: auto;
+  }
 }
+
+
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #2c2c2c;
+    color: #ffffff;
+  }
+
+  .main {
+    background-color: #2c2c2c;
+    color: #ffffff;
+  }
+
+  .header, .body, .inputbox {
+    background-color: #2c2c2c;
+    color: #ffffff;
+  }
+
+  input{
+    color: #fff !important;
+  }
+
+  .island {
+    background-color: #2c2c2c;
+    color: #ffffff;
+  }
+
+
+
+  .sendbutton {
+    background-color: #2c2c2c;
+    color: #ffffff;
+  }
+
+  .custom-file-upload {
+    background-color: #2c2c2c;
+    color: #ffffff;
+  }
+
+  .pdfname {
+    color: #ffffff;
+  }
+
+  .no-chat-history {
+    color: #ffffff;
+  }
+  .boxx{
+    box-shadow: rgba(137, 137, 140, 0.2) 0px 7px 29px 0px;
+  }
+  .header{
+    display: flex;
+    box-shadow: rgba(127, 127, 131, 0.2) 0px 7px 29px 0px;
+  }
+
+  .logolight{
+    display: none;
+  }
+  .logodark{
+    display: block;
+  }
+}
+

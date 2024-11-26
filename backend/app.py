@@ -80,7 +80,13 @@ def store_embeddings_in_qdrant(collection_name, text_chunks, embeddings):
     for i, embedding in enumerate(embeddings, start=1):
         points.append(PointStruct(id=i, vector=embedding, payload={"text": text_chunks[i - 1]}))
 
-    qdrant_client.recreate_collection(
+    try:
+        qdrant_client.get_collection(collection_name)
+        qdrant_client.delete_collection(collection_name)
+    except Exception:
+        pass
+
+    qdrant_client.create_collection(
         collection_name=collection_name,
         vectors_config=vectors_config,
     )
@@ -92,7 +98,6 @@ class QueryRequest(BaseModel):
     collection_name: str
     query: str
 
-# Endpoint for querying the database and generating responses
 @app.post("/query/")
 async def query_database(request: QueryRequest):
     query_embedding = cohere_client.embed(texts=[request.query]).embeddings[0]

@@ -2,6 +2,11 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
 import Markdown from 'react-markdown';
+import aiplanet from "./images/download.png"
+import usericon from "./images/usericon.png"
+import logo from "./images/logo.png"
+import logolight from "./images/logolight.png"
+import logodark from "./images/logodark.png"
 
 const FileUpload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -34,7 +39,7 @@ const FileUpload = () => {
     formData.append("pdf_file", file);
 
     try {
-      const response = await axios.post("https://paperchat-api.onrender.com/upload/", formData, {
+      const response = await axios.post("http://localhost:8000/upload/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -55,21 +60,25 @@ const FileUpload = () => {
   };
 
   const handleQuery = async () => {
-    if (!query) return;
+    if (!query || !pdfUploaded) return;
 
-    const newChatHistory = [...chatHistory, { type: "user", text: query }];
+    await sendMessage(query);
+  };
+
+  const sendMessage = async (message) => {
+    const newChatHistory = [...chatHistory, { type: "user", text: message }];
     setChatHistory(newChatHistory); 
     setQuery(""); 
     setResponse(""); 
 
     try {
-      const response = await fetch('https://paperchat-api.onrender.com/query/', {
+      const response = await fetch('http://localhost:8000/query/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          query: query,
+          query: message,
           collection_name: collectionName,
         }),
       });
@@ -110,10 +119,18 @@ const FileUpload = () => {
     }
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleQuery();
+    }
+  };
+
   return (
     <div className="main">
       <div className="header">
-        <img src="https://proxmaq.com/wp-content/uploads/2023/03/AI_Planet-logo.jpg" alt="AI Planet Logo"/>
+      <div className="logo logodark"><img src={logodark} alt="AI Planet Logo"/></div>
+        <div className="logo logolight"><img  src={logolight} alt="AI Planet Logo"/></div>
         <div className="labelbutton">
           {selectedFile ? (uploading ? <div className="fileicon"><i className="loader ri-loader-4-line"></i></div> : <div className="fileicon"><i className="ri-file-3-line"></i></div>) : ""}
           <label className="pdfname" htmlFor="file-upload">
@@ -131,20 +148,42 @@ const FileUpload = () => {
       </div>
       <div className="body">
         <div className="chat">
-          {chatHistory.map((entry, index) => (
-            <div key={index} className={entry.type === "user" ? "user-query" : "bot-response"}>
-              <div className="profile">
-                <img className="icon" src={entry.type === "user" ? "https://static.vecteezy.com/system/resources/thumbnails/007/461/014/small/profile-gradient-logo-design-template-icon-vector.jpg" : "https://yt3.googleusercontent.com/9RnnCIf9OpQ2vpNowrYw_QAcG3tPSI2iaElvIM7-B13hHwynyZzgnXAm9h8AwwG-gfOnKOT4224=s900-c-k-c0x00ffffff-no-rj"}/>
+          {chatHistory.length > 0 ? (
+            chatHistory.map((entry, index) => (
+              <div key={index} className={entry.type === "user" ? "user-query" : "bot-response"}>
+                <div className="profile">
+                  <img className="icon" src={entry.type === "user" ? usericon : aiplanet}/>
+                </div>
+                <div className="texts">
+                  <div className="markdown-body"><Markdown>{entry.text}</Markdown></div>
+                </div>
               </div>
-              <div className="texts"><div><Markdown>{entry.text}</Markdown></div></div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <div className="no-chat-history"><div className="island">
+                <h3>Instructions:</h3>
+                <p>Upload a PDF: Click on "<i className="ri-add-circle-line"></i><span className="novisible">Upload PDF</span>" to select and upload a PDF document. Wait for the upload to complete.</p>
+                <p>Enter Your Query: Once the PDF is uploaded, type your query in the input box and press the send button.</p>
+            </div></div>
+          )}
           <div ref={chatEndRef} /> 
         </div>
         <div className="inputbox">
           <div className="boxx">
-            <input placeholder="Send a message..." type="text" value={query} onChange={handleQueryChange} />
-            <button className="sendbutton" onClick={handleQuery} disabled={!pdfUploaded || !query}><i className="ri-send-plane-2-line"></i></button>
+            <input
+              placeholder="Send a message..."
+              type="text"
+              value={query}
+              onChange={handleQueryChange}
+              onKeyPress={handleKeyPress}
+            />
+            <button
+              className="sendbutton"
+              onClick={handleQuery}
+              disabled={!pdfUploaded || !query}
+            >
+              <i className="ri-send-plane-2-line"></i>
+            </button>
           </div>
         </div>
       </div>
