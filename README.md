@@ -11,21 +11,7 @@ https://github.com/mdimado/PaperChat/assets/123477562/a5adbe2b-6595-4acd-a5e6-81
 
 
 
-### File Structure
 
-- **`backend/`**
-  - **`main.py`**
-  - **`requirements.txt`**
-- **`frontend/`**
-  - **`public/`**
-  - **`src/`**
-    - **`components/`**
-    - **`assets/`**
-    - **`App.js/`**
-    - **`App.css/`**
-    - **`Index.js/`**
-    - **`Index.css/`**
-- **`readme.md`**
 
 ### Setup Instructions
 
@@ -77,3 +63,8 @@ Follow these steps to set up and run the project:
    ```
 
 
+<img width="1440" alt="Screenshot 2024-06-21 at 11 41 12 PM" src="https://github.com/mdimado/PaperChat/assets/123477562/c04a2938-e5a6-420b-a980-fb2c7c11b22a">
+
+<img width="723" alt="Screenshot 2024-06-21 at 11 41 39 PM" src="https://github.com/mdimado/PaperChat/assets/123477562/88f39359-6791-4645-82ca-77206af2c710">
+
+<img width="379" alt="Screenshot 2024-06-21 at 11 42 02 PM" src="https://github.com/mdimado/PaperChat/assets/123477562/6f4f22b6-6be2-4834-b2db-f2a7e5754c9e">
